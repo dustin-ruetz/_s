@@ -114,20 +114,33 @@ function _s_widgets_init() {
 add_action( 'widgets_init', '_s_widgets_init' );
 
 /**
- * Enqueue scripts and styles.
+ * Enqueue styles and scripts.
  */
-function _s_scripts() {
+function _s_styles_scripts() {
 	wp_enqueue_style( '_s-style', get_stylesheet_uri() );
 
-	wp_enqueue_script( '_s-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20151215', true );
+	wp_enqueue_script(
+		// description of arguments to enqueue a script:
+		/* 1. handle         : */ '_s-navigation',
+		/* 2. source         : */ get_template_directory_uri() . '/js/navigation.js',
+		/* 3. dependencies   : */ false,
+		/* 4. version        : */ '20151215',
+		/* 5. load in footer : */ true
+	);
 
-	wp_enqueue_script( '_s-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20151215', true );
+	wp_enqueue_script( '_s-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', false, '20151215', true );
+
+	// deregister local WordPress copy of jQuery
+	wp_deregister_script( 'jquery' );
+
+	// main.js script file
+	wp_enqueue_script( '_s-main', get_template_directory_uri() . '/js/main.js', false, null, true );
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 }
-add_action( 'wp_enqueue_scripts', '_s_scripts' );
+add_action( 'wp_enqueue_scripts', '_s_styles_scripts' );
 
 /**
  * Implement the Custom Header feature.

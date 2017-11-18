@@ -1,0 +1,4 @@
+*.lnk
+*.map
+*.url
+node_modules
